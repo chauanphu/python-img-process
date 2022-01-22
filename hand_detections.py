@@ -88,8 +88,6 @@ class HandDetector():
     def isStraight(self, vec1, vec2, confident=1):
         x1, y1 = vec1
         x2, y2 = vec2
-        x1 += 10^-4
-        x2 += 10^-4
         deno = x1*y2
         if deno == 0:
             deno += 10^-6
@@ -111,7 +109,7 @@ class HandDetector():
         return True if length <= confident else False
         
     def calculate_ratio(self, img, x, y):
-        w, h = img.shape[:2]
+        h, w = img.shape[:2]
         ratx = x/w
         raty = y/h
         return ratx, raty

@@ -1,15 +1,9 @@
 import cv2 as cv
 import hand_detections as h_md
 from pynput.mouse import Button, Controller
-
-#Define webcam's resolution
-########################
-wCam, hCam = 900, 600
-########################
+import numpy as np
 
 cap = cv.VideoCapture(0)
-cap.set(3, wCam)
-cap.set(4, hCam)
 
 detector = h_md.HandDetector(maxHands=1,detectionCon=0.8) 
 mouse = Controller()
@@ -44,18 +38,17 @@ while cap.isOpened():
         # 1.Move mouse
         x,y = detector.get_palm(lmList)
         x, y = detector.calculate_ratio(img, x, y)
-        mouse.position = (x*1960,y*1080)
+        mouse.position = (x*1920, y*1080)
         # 2.Left click
-        if detector.isTip(lmList,detector.INDEX, 100):
-            mouse.press(Button.left)
-            print(True)
-        else:
-            mouse.release(Button.left)
-        # 3.Right click
-        if detector.isTip(lmList,detector.MIDDLE):
-            mouse.press(Button.right)
-        else:
-            mouse.release(Button.right)
+        # if detector.isTip(lmList,detector.INDEX, 100):
+        #     mouse.press(Button.left)
+        # else:
+        #     mouse.release(Button.left)
+        # # 3.Right click
+        # if detector.isTip(lmList,detector.MIDDLE):
+        #     mouse.press(Button.right)
+        # else:
+        #     mouse.release(Button.right)
     ####################
 
     # Display camera
