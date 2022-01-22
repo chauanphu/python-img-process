@@ -30,7 +30,7 @@ if __name__ == '__main__':
                     img,
                     results.pose_landmarks,
                     mp_pose.POSE_CONNECTIONS)
-
+                
             # Flip image
             img = cv.flip(img, 1)
 
