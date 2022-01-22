@@ -1,9 +1,10 @@
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
+import mouse
 
 class HandDetector():
-    def __init__(self, mode=False, maxHands=4, complexity=1, detectionCon=0.5, trackCon=0.5) -> None:
+    def __init__(self, mode=False, maxHands=2, complexity=1, detectionCon=0.5, trackCon=0.5) -> None:
         self.mpHands = mp.solutions.hands
         self.hands = self.mpHands.Hands(mode, maxHands, complexity, detectionCon, trackCon)
         self.mpDraw = mp.solutions.drawing_utils
@@ -37,15 +38,26 @@ class HandDetector():
                     cv.circle(img, (cx,cy), 5, (255,0,255), cv.FILLED)   
         return lmList
 
-handdetector = HandDetector()
+    def calculate_ratio(self, img, x, y):
+        w, h = img.shape[:2]
+        ratx = x/w
+        raty = y/h
+        return ratx, raty
+
+detector = HandDetector()
 
 if __name__ == '__main__':
     cap = cv.VideoCapture(0)
 
     while True:
         success, img = cap.read()
-        img = handdetector.find_hands(img)
-        lmList = handdetector.find_index(img)
+        img = detector.find_hands(img)
+        lmList = detector.find_index(img)
+
+        if lmList:
+            id, x, y = lmList[8]
+            x, y = detector.calculate_ratio(img, x, y)
+            mouse.moveMouse((x*1960,y*1080))
 
         cv.imshow('Normal', img)
         if cv.waitKey(1) & 0xFF == ord('q'):
