@@ -4,7 +4,7 @@ from pynput.mouse import Button, Controller
 
 #Define webcam's resolution
 ########################
-wCam, hCam = 640, 480
+wCam, hCam = 900, 600
 ########################
 
 cap = cv.VideoCapture(0)
@@ -46,8 +46,16 @@ while cap.isOpened():
         x, y = detector.calculate_ratio(img, x, y)
         mouse.position = (x*1960,y*1080)
         # 2.Left click
-        print(detector.isUp(lmList,detector.INDEX))
+        if detector.isTip(lmList,detector.INDEX, 100):
+            mouse.press(Button.left)
+            print(True)
+        else:
+            mouse.release(Button.left)
         # 3.Right click
+        if detector.isTip(lmList,detector.MIDDLE):
+            mouse.press(Button.right)
+        else:
+            mouse.release(Button.right)
     ####################
 
     # Display camera

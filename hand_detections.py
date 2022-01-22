@@ -1,7 +1,6 @@
 import cv2 as cv
-import numpy as np
+import math
 import mediapipe as mp
-import mouse
 
 class HandDetector():
     THUMB = 4
@@ -64,29 +63,29 @@ class HandDetector():
             x1, y1 = lmList[self.THUMB][1], lmList[self.THUMB][2]
             x2, y2 = lmList[self.THUMB-1][1], lmList[self.THUMB-1][2]
             x3, y3 = lmList[self.THUMB-3][1], lmList[self.THUMB-3][2]
-            return self.isStraight((x2-x3,y2-y3), (x1-x3, y1-y3), confident=.9)
+            return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
         elif finger == self.INDEX:
             x1, y1 = lmList[self.INDEX][1], lmList[self.INDEX][2]
             x2, y2 = lmList[self.INDEX-2][1], lmList[self.INDEX-2][2]
             x3, y3 = lmList[self.INDEX-3][1], lmList[self.INDEX-3][2]
-            return self.isStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
+            return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
         elif finger == self.MIDDLE:
             x1, y1 = lmList[self.MIDDLE][1], lmList[self.MIDDLE][2]
             x2, y2 = lmList[self.MIDDLE-1][1], lmList[self.MIDDLE-1][2]
             x3, y3 = lmList[self.MIDDLE-3][1], lmList[self.MIDDLE-3][2]
-            return self.isStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
+            return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
         elif finger == self.RING:
             x1, y1 = lmList[self.RING][1], lmList[self.RING][2]
             x2, y2 = lmList[self.RING-1][1], lmList[self.RING-1][2]
             x3, y3 = lmList[self.RING-3][1], lmList[self.RING-3][2]
-            return self.isStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
+            return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
         elif finger == self.PINKY:
             x1, y1 = lmList[self.PINKY][1], lmList[self.PINKY][2]
             x2, y2 = lmList[self.PINKY-1][1], lmList[self.PINKY-1][2]
             x3, y3 = lmList[self.PINKY-3][1], lmList[self.PINKY-3][2]
-            return self.isStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
+            return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
 
-    def isStraight(self, vec1, vec2, confident=2):
+    def isStraight(self, vec1, vec2, confident=1):
         x1, y1 = vec1
         x2, y2 = vec2
         x1 += 10^-4
@@ -97,7 +96,20 @@ class HandDetector():
         ratio = (y1*x2)/deno
         return False if ratio < 0 or ratio > confident else True
 
-
+    def isTip(self, lmList, finger: int, confident=50):
+        x1, y1 = lmList[self.THUMB][1], lmList[self.THUMB][2]
+        x2, y2 = 0, 0
+        if finger == self.INDEX:
+            x2, y2 = lmList[self.INDEX][1], lmList[self.INDEX][2]
+        elif finger == self.MIDDLE:
+            x2, y2 = lmList[self.MIDDLE][1], lmList[self.MIDDLE][2]
+        elif finger == self.RING:
+            x2, y2 = lmList[self.RING][1], lmList[self.RING][2]
+        elif finger == self.PINKY:
+            x2, y2 = lmList[self.PINKY][1], lmList[self.PINKY][2]
+        length = math.hypot(x1-x2, y1-y2)
+        return True if length <= confident else False
+        
     def calculate_ratio(self, img, x, y):
         w, h = img.shape[:2]
         ratx = x/w
