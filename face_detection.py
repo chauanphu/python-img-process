@@ -3,15 +3,15 @@ import mediapipe as mp
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
-mp_pose = mp.solutions.pose
+mp_face = mp.solutions.face_detection
 
 cap = cv.VideoCapture(0)
 
 if __name__ == '__main__':
-    with mp_pose.Pose(
+    with mp_face.FaceDetection(
+        model_selection = 0,
         min_detection_confidence = 0.5,
-        min_tracking_confidence = 0.5
-    ) as pose:
+    ) as face:
         while cap.isOpened():
             success, img = cap.read()
 
@@ -22,14 +22,15 @@ if __name__ == '__main__':
             #Detect pose
             img.flags.writeable = False
             img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-            results = pose.process(img)
+            results = face.process(img)
 
+            # Draw rectangles
+            img.flags.writeable = True
             img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
-            if results.pose_landmarks:
-                mp_drawing.draw_landmarks(
-                    img,
-                    results.pose_landmarks,
-                    mp_pose.POSE_CONNECTIONS)
+            if results.detections:
+                for detection in results.detections:
+                    mp_drawing.draw_detection(
+                        img, detection)
 
             # Flip image
             img = cv.flip(img, 1)

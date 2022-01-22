@@ -49,7 +49,7 @@ detector = HandDetector()
 if __name__ == '__main__':
     cap = cv.VideoCapture(0)
 
-    while True:
+    while cap.isOpened():
         success, img = cap.read()
         img = detector.find_hands(img)
         lmList = detector.find_index(img)
