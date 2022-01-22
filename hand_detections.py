@@ -44,7 +44,7 @@ class HandDetector():
         raty = y/h
         return ratx, raty
 
-detector = HandDetector()
+detector = HandDetector(maxHands=1)
 
 if __name__ == '__main__':
     cap = cv.VideoCapture(0)
@@ -52,11 +52,17 @@ if __name__ == '__main__':
     while cap.isOpened():
         success, img = cap.read()
         img = detector.find_hands(img)
-        lmList = detector.find_index(img)
+        lmList = detector.find_index(img, draw=False)
 
         if lmList:
-            id, x, y = lmList[8]
+            x1, y1 = lmList[0][1], lmList[0][2]
+            x2, y2 = lmList[9][1], lmList[9][2]
+            x = (x1 + x2)//2
+            y = (y1 + y2)//2
+
+            cv.circle(img, (x,y), 3, (255,255,0), cv.FILLED)
             x, y = detector.calculate_ratio(img, x, y)
+
             mouse.moveMouse((x*1960,y*1080))
 
         cv.imshow('Normal', img)
