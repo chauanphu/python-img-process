@@ -19,6 +19,9 @@ if __name__ == '__main__':
                 print("Error ! Can't open camera")
                 continue
             
+            # Flip image
+            img = cv.flip(img, 1)
+
             #Detect pose
             img.flags.writeable = False
             img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
@@ -31,9 +34,6 @@ if __name__ == '__main__':
                 for detection in results.detections:
                     mp_drawing.draw_detection(
                         img, detection)
-
-            # Flip image
-            img = cv.flip(img, 1)
 
             # Show stream video
             cv.imshow("Webcam", img)
