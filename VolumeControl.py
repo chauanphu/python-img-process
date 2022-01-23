@@ -1,6 +1,6 @@
 import cv2 as cv
-import volume
-import hand_detections as h_md
+import modules.volume as volume
+import modules.hand_detections as h_md
 import math
 
 #Define webcam's resolution
@@ -35,7 +35,7 @@ while cap.isOpened():
     success, img = cap.read()
 
     img = detector.find_hands(img)
-    lmList = detector.find_index(img, draw=False)
+    lmList = detector.find_index(draw=False)
     
     #Find indexes
     ####################

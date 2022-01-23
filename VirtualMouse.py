@@ -1,7 +1,6 @@
 import cv2 as cv
-import hand_detections as h_md
+import modules.hand_detections as h_md
 from pynput.mouse import Button, Controller
-import numpy as np
 
 cap = cv.VideoCapture(0)
 
