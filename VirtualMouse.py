@@ -40,12 +40,12 @@ while cap.isOpened():
         x, y = detector.calculate_ratio(img, x, y)
         mouse.position = (x*1920, y*1080)
         #2.Left click
-        if detector.isTip(lmList,detector.INDEX, .3):
+        if detector.isTip(lmList,detector.INDEX, .2):
             mouse.press(Button.left)
         else:
             mouse.release(Button.left)
         # 3.Right click
-        if detector.isTip(lmList,detector.MIDDLE, .3):
+        if detector.isTip(lmList,detector.MIDDLE, .2):
             mouse.press(Button.right)
         else:
             mouse.release(Button.right)
