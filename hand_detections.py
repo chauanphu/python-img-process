@@ -66,7 +66,7 @@ class HandDetector():
         x1, y1 = lmList[finger][1], lmList[finger][2]
         x2, y2 = lmList[finger-1][1], lmList[finger-1][2]
         x3, y3 = lmList[finger-3][1], lmList[finger-3][2]
-        return self.isVectorStraight((x2-x3,y2-y3), (x1-x3, y1-y3))
+        return self.isVectorStraight((x2-x3,y2-y3), (x1-x2, y1-y2))
 
     def isStraight(self, vec1, vec2, confident=1):
         x1, y1 = vec1

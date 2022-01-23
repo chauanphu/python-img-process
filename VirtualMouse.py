@@ -45,7 +45,7 @@ while cap.isOpened():
         else:
             mouse.release(Button.left)
         # 3.Right click
-        if detector.isTip(lmList,detector.MIDDLE, .2):
+        if detector.isTip(lmList,detector.MIDDLE, .2    ):
             mouse.press(Button.right)
         else:
             mouse.release(Button.right)
